@@ -17,7 +17,7 @@
     "纳音"
   ],
   "author": "Natron Kan (waterbeside)",
-  "homepage": "https://github.com/lunisolar-js/packages/char8ex/README.md",
+  "homepage": "https://lunisolar.js.org/guide/plugins/char8ex.html",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lunisolar-js/plugins.git"

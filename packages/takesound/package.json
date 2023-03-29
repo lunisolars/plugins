@@ -16,7 +16,7 @@
     "五行",
     "纳音"
   ],
-  "homepage": "https://github.com/lunisolar-js/packages/takesound/README.md",
+  "homepage": "https://lunisolar.js.org/guide/plugins/takeSound.html",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lunisolar-js/plugins.git"

@@ -21,7 +21,7 @@
     "农历",
     "建除十二神"
   ],
-  "homepage": "https://github.com/lunisolar-js/packages/thegods/README.md",
+  "homepage": "https://lunisolar.js.org/guide/plugins/theGods.html",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lunisolar-js/plugins.git"
