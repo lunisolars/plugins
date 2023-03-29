@@ -1,12 +1,39 @@
 {
   "name": "@lunisolar/plugins",
   "private": "true",
-  "description": "",
-  "main": "index.js",
+  "description": "lunisolar.js 插件集",
+  "packageManager": "pnpm@7.26.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "pnpm -r test"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Natron Kan (waterbeside)",
+  "license": "MIT",
+  "devDependencies": {
+    "@jest/types": "^29.4.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.13.0",
+    "@types/rollup-plugin-peer-deps-external": "^2.2.1",
+    "@typescript-eslint/parser": "^5.51.0",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.5.0",
+    "lunisolar": "^2.2.0",
+    "prettier": "^2.8.4",
+    "rollup": "^3.15.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-dts": "^5.1.1",
+    "rollup-plugin-filesize": "^10.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
+  }
 }
