@@ -1,6 +1,6 @@
 {
   "name": "@lunisolar/plugin-fetalgod",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "lunisolar.js的胎神占方插件",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
