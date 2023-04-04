@@ -1,0 +1,3 @@
+class SX {}
+
+export { SX }

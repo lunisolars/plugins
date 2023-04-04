@@ -69,6 +69,12 @@ importers:
     devDependencies:
       conventional-changelog-cli: 2.2.2
 
+  packages/sx:
+    specifiers:
+      conventional-changelog-cli: ^2.2.2
+    devDependencies:
+      conventional-changelog-cli: 2.2.2
+
   packages/takesound:
     specifiers: {}
 
