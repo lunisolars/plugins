@@ -1,7 +1,7 @@
 import { int2 } from './func'
 //=================================日期计算--=======================================
 //==================================================================================
-type R = {
+export type JDR = {
   Y: number
   M: number
   D: number
@@ -22,7 +22,7 @@ export const JD = {
   },
   DD: function (jd: number) {
     //儒略日数转公历
-    const r: R = {
+    const r: JDR = {
       Y: 0,
       M: 0,
       D: 0,
@@ -53,7 +53,7 @@ export const JD = {
     r.s = F
     return r
   },
-  DD2str: function (r: R) {
+  DD2str: function (r: JDR) {
     //日期转为串
     let Y = '     ' + r.Y,
       M = '0' + r.M,
