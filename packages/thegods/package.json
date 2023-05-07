@@ -24,7 +24,7 @@
   "homepage": "https://lunisolar.js.org/guide/plugins/theGods.html",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lunisolar-js/plugins.git"
+    "url": "git+https://github.com/lunisolars/plugins.git"
   },
   "author": "Natron Kan (waterbeside)",
   "license": "GPL-3.0",

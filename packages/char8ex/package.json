@@ -20,7 +20,7 @@
   "homepage": "https://lunisolar.js.org/guide/plugins/char8ex.html",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lunisolar-js/plugins.git"
+    "url": "git+https://github.com/lunisolars/plugins.git"
   },
   "license": "MIT",
   "devDependencies": {
