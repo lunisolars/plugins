@@ -1,5 +1,5 @@
-import { SUO_KB, QI_KB, SUO_S, QI_S } from '../constants/qs'
-import { J2000 } from '../constants/'
+import { SUO_KB, QI_KB, SUO_S, QI_S } from '../../constants/qs'
+import { J2000 } from '../../constants/'
 import { S_aLonT2, S_aLonT, MS_aLonT, MS_aLonT2 } from './xl'
 import { dtT } from './deltaT'
 
@@ -286,3 +286,13 @@ export const SSQ = {
     }
   }
 }
+
+export const qiAccurate = function (W: number) {
+  var t = S_aLonT(W) * 36525
+  return t - dtT(t) + 8 / 24
+} //精气
+
+export const soAccurate = function (W: number) {
+  var t = MS_aLonT(W) * 36525
+  return t - dtT(t) + 8 / 24
+} //精朔

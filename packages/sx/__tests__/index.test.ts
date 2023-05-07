@@ -4,4 +4,4 @@ import { plugin } from '../src/index'
 
 lunisolar.extend(plugin)
 
-describe('test plugin', () => {})
+// describe('test plugin', () => {})
