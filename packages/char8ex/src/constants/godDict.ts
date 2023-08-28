@@ -28,7 +28,7 @@ export const godDict: C8GodDict = {
     rules: [
       {
         startBy: 'stem',
-        startPillar: ['year', 'day'],
+        startPillar: ['day'], // <图解三命通会 第一部> 的天乙贵人只以日干起
         findBy: 'branch',
         rule: [
           [1, 7],
@@ -55,6 +55,28 @@ export const godDict: C8GodDict = {
       }
     ]
   },
+  文星貴人: {
+    luckLevel: 1,
+    rules: [
+      {
+        startBy: 'stem',
+        startPillar: ['year', 'day'],
+        findBy: 'branch',
+        rule: [6, 5, 8, 9, 8, 9, 10, 11, 2, 3]
+      }
+    ]
+  },
+  天印貴人: {
+    luckLevel: 1,
+    rules: [
+      {
+        startBy: 'stem',
+        startPillar: ['year', 'day'],
+        findBy: 'branch',
+        rule: [2, 11, 10, 9, 8, 7, 6, 5, 4, 3]
+      }
+    ]
+  },
   國印貴人: {
     luckLevel: 1,
     rules: [
@@ -68,11 +90,12 @@ export const godDict: C8GodDict = {
   },
   // 年干见支
   太極貴人: {
+    // <图解三命会通 第一部> 以日干起而非年干
     luckLevel: 1,
     rules: [
       {
         startBy: 'stem',
-        startPillar: ['year'],
+        startPillar: ['day'], // 改成日干起例
         findBy: 'branch',
         sbFormatter: (sV: number, bV: number) => [sV >> 1, bV],
         rule: [
@@ -159,9 +182,9 @@ export const godDict: C8GodDict = {
     rules: [
       {
         startBy: 'stem',
-        startPillar: ['day'],
+        startPillar: ['year', 'day'], // 《图解 三命通会 第一部》以年干或日干考查
         findBy: 'sb',
-        rule: [26, 27, 41, 54, 53, 6, 8, 9, 12]
+        rule: [26, 27, 41, 54, 53, 6, 8, 9, 59, 58]
       }
     ]
   },
@@ -257,6 +280,17 @@ export const godDict: C8GodDict = {
         findBy: 'branch',
         sbFormatter: (sV: number, bV: number) => [sV, bV % 3],
         rule: [5, 1, 9]
+      }
+    ]
+  },
+  月煞: {
+    luckLevel: -1,
+    rules: [
+      {
+        startBy: 'branch',
+        startPillar: ['month'],
+        findBy: 'branch',
+        rule: [0, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
       }
     ]
   },
@@ -451,10 +485,10 @@ export const godDict: C8GodDict = {
         findBy: 'stem',
         sbFormatter: (sV, bV) => [sV, bV % 4],
         rule: [
-          [0, 1],
-          [2, 3],
           [4, 5, 8, 9],
-          [6, 7]
+          [6, 7],
+          [2, 3],
+          [0, 1]
         ]
       }
     ]
@@ -554,7 +588,7 @@ export const godDict: C8GodDict = {
     rules: [
       {
         startBy: 'branch',
-        startPillar: ['year', 'day'],
+        startPillar: ['year', 'day'], // <图解三命通会 第一部>, 只以年支为主
         findBy: 'branch',
         sbFormatter: (sV, bV) => [sV, bV % 4],
         rule: [6, 3, 0, 9]
@@ -652,6 +686,17 @@ export const godDict: C8GodDict = {
       }
     ]
   },
+  天喜: {
+    luckLevel: 1,
+    rules: [
+      {
+        startBy: 'season',
+        startPillar: ['null:day'],
+        findBy: 'branch',
+        rule: [10, 1, 4, 7]
+      }
+    ]
+  },
   四廢: {
     luckLevel: -1,
     rules: [
@@ -684,6 +729,7 @@ export const godDict: C8GodDict = {
       }
     ]
   },
+  // 金神即暗金的杀
   金神: {
     luckLevel: -1,
     rules: [
@@ -741,6 +787,7 @@ export const godDict: C8GodDict = {
   //     }
   //   ]
   // },
+  // <图解三命通会 第一部>, 只以年日干五行起
   學堂: {
     luckLevel: 1,
     rules: [
