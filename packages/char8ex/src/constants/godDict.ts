@@ -149,7 +149,7 @@ export const godDict: C8GodDict = {
         startBy: 'stem',
         startPillar: ['day'],
         findBy: 'branch',
-        rule: [3, 2, 6, 5, 6, 5, 9, 8, 0, 11]
+        rule: [3, 4, 6, 7, 6, 7, 9, 10, 0, 1] // 图解三命通会第一部 p432
       }
     ]
   },
@@ -369,6 +369,7 @@ export const godDict: C8GodDict = {
       }
     ]
   },
+  // 元辰又叫大耗 图解三命通会 P445
   元辰: {
     luckLevel: -1,
     rules: [
@@ -588,7 +589,7 @@ export const godDict: C8GodDict = {
     rules: [
       {
         startBy: 'branch',
-        startPillar: ['year', 'day'], // <图解三命通会 第一部>, 只以年支为主
+        startPillar: ['year'], // <图解三命通会 第一部>, 只以年支为主
         findBy: 'branch',
         sbFormatter: (sV, bV) => [sV, bV % 4],
         rule: [6, 3, 0, 9]
@@ -729,7 +730,6 @@ export const godDict: C8GodDict = {
       }
     ]
   },
-  // 金神即暗金的杀
   金神: {
     luckLevel: -1,
     rules: [
