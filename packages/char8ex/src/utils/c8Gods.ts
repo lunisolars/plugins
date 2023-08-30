@@ -1,3 +1,10 @@
+/** ==========
+ * 神煞匹配：
+ * 1. 每柱分别历遍godDict的所有key, 按指定规则检查该神煞key是否命中该柱。
+ * 2. 匹配时，以start对比end，如华盖年支见支者，start为年支，其它柱各支为end, 
+ * rule为数组时，数组下标即为stat的天干或地支的顺序索引值，其下标对应的value为end的天干或地支的顺序索引。
+=========== */
+
 import { C8God } from './../class/c8God'
 import { Pillar } from './../class/pillar'
 import type { Char8Ex } from '../class/char8ex'
@@ -14,6 +21,12 @@ type CheckC8GodReturn = {
 
 const ymdhList: YMDH[] = ['year', 'month', 'day', 'hour']
 
+/**
+ * 检查八字是否含有指定神煞
+ * @param c8ex 八字对象
+ * @param godKey 神煞key
+ * @returns {CheckC8GodReturn} `{luckLevel: 吉凶等级, res: 各柱的匹配结果，isHasTrue: 是否有匹配成功的}`
+ */
 export const checkC8God = (c8ex: Char8Ex, godKey: string): CheckC8GodReturn => {
   if (!godKeysSet.has(godKey)) throw new Error(`Error C8God key: ${godKey}`)
   const { luckLevel, rules } = godDict[godKey]
@@ -30,9 +43,16 @@ export const checkC8God = (c8ex: Char8Ex, godKey: string): CheckC8GodReturn => {
   return { luckLevel, res: allRes, isHasTrue: hasTrue }
 }
 
+/**
+ * 通过神煞规则计算八字是否包含该神煞
+ * @param c8ex 八字实例
+ * @param ruleItem 单条规则
+ * @returns {(YMDH | 'null')[]}
+ */
 export const checkC8RuleItem = (c8ex: Char8Ex, ruleItem: GodRuleItem) => {
   const { startPillar, startAO } = ruleItem
   const isAnd = startAO === 'and'
+  // 存放年月日时各柱是否含神煞结果。
   const res: RuleRes = [[], [], [], []]
   const resTemp: [{ [key in YMDH[number]]: boolean }, boolean][] = []
   let isAllTrue = true
@@ -63,13 +83,20 @@ export const checkC8RuleItem = (c8ex: Char8Ex, ruleItem: GodRuleItem) => {
   }
 }
 
+/**
+ * 以单个startPillar验证神煞规则
+ * @param c8ex 八字实例
+ * @param ruleItem 单条起神煞规则
+ * @param sp 哪个柱起神煞，如'year','month'等
+ * @returns [{year: boolean, month: boolean, day: boolean, hour: boolean}年月日时分别是否命中, 是否全部命中，是否有命中]
+ */
 export const checkPerStartPillar = (
   c8ex: Char8Ex,
   ruleItem: GodRuleItem,
   sp: string
 ): [{ [key in YMDH[number]]: boolean }, boolean, boolean] => {
   const { startBy, startMapping, findBy, sbFormatter, ruleParams, rule } = ruleItem
-  const spSplit = sp.split(':')
+  const spSplit = sp.split(':') // 如果有冒号，下标0者为起神的柱，下标1者为查神的柱
   const startP = spSplit[0] as YMDH | 'null'
   const endPs = (spSplit[1] ? [spSplit[1]] : ymdhList) as YMDH[]
   let resDict: { [key in YMDH[number]]: boolean } = {
@@ -91,7 +118,7 @@ export const checkPerStartPillar = (
   if (startP === 'null') {
     // 当startP为null时，只要endP合rull即可
     const ruleSet = new Set(ruleRes)
-    return getPillarCheckRes(c8ex, endPs, findBy, ruleSet)
+    return getPillarCheckRes(c8ex, endPs, findBy, ruleSet, startBy, startP)
   } else {
     const startPO = c8ex[startP]
     let startValue: number
@@ -112,7 +139,7 @@ export const checkPerStartPillar = (
     if (ruleHit === null) return [resDict, isAllTrue, isHasTrue]
     const ruleSet = Array.isArray(ruleHit) ? new Set(ruleHit) : new Set([ruleHit])
 
-    return getPillarCheckRes(c8ex, endPs, findBy, ruleSet)
+    return getPillarCheckRes(c8ex, endPs, findBy, ruleSet, startBy, startP)
   }
 }
 
@@ -147,6 +174,12 @@ export const getObjectProperties = (obj: Object, propsString: string): unknown =
   return res
 }
 
+/**
+ * 取得end的查例目标值
+ * @param endPO end 四柱实例
+ * @param findBy 用什么查例
+ * @returns 目标值
+ */
 export const getEndTarget = (
   endPO: Pillar,
   findBy: 'branch' | 'stem' | 's,b' | 'sb'
@@ -160,11 +193,23 @@ export const getEndTarget = (
   return target
 }
 
+/**
+ * 取得各柱是否命中规则
+ * @param c8ex 八字实例
+ * @param endPs 找哪一个柱
+ * @param findBy 是查该柱的年支还是天干
+ * @param ruleSet 把rule数组转为set类型传入
+ * @param startBy 以什么起神煞，用于排除指定柱起例，如年支见支，查例时要排除年支
+ * @param startP 用哪个柱起例
+ * @returns [{year: boolean, month: boolean, day: boolean, hour: boolean}年月日时分别是否命中, 是否全部命中，是否有命中]
+ */
 export const getPillarCheckRes = (
   c8ex: Char8Ex,
   endPs: YMDH[],
   findBy: 'branch' | 'stem' | 's,b' | 'sb',
-  ruleSet: Set<number | number[] | null | string>
+  ruleSet: Set<number | number[] | null | string>,
+  startBy: 'branch' | 'stem' | 'takeSoundE5' | 'season' | 'sb' | null,
+  startP: string
 ): [{ [key in YMDH[number]]: boolean }, boolean, boolean] => {
   const resDict = {
     year: false,
@@ -175,9 +220,10 @@ export const getPillarCheckRes = (
   let allTrue = true
   let hasTrue = false
   for (const endP of endPs) {
-    const endPO = c8ex[endP]
+    if (startP !== null && startP === endP && startBy === findBy) continue
+    const endPO = c8ex[endP] // end的四柱实例 End Pillar Object
     const target = getEndTarget(endPO, findBy)
-    let isHit = false
+    let isHit = false // 是否命中规则
     if (Array.isArray(target)) {
       for (const t of target) {
         if (ruleSet.has(t)) {
@@ -202,6 +248,11 @@ export const getGodLuckLevel = (godKey: string) => {
   return luckLevel
 }
 
+/**
+ * 生成所有八字神煞
+ * @param c8ex 八字对象实例
+ * @returns {year: C8God[], month: C8God[], day: C8God[], hour: C8God[]}
+ */
 export const createAllC8Gods = (c8ex: Char8Ex) => {
   const allGodsRes: { [x in YMDH]: C8God[] } = {
     year: [],
