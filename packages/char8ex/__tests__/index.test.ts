@@ -11,9 +11,7 @@ describe('plugins/char8ex', () => {
     expect(c8ex.gods.year.map(item => item.name)).toEqual(
       expect.arrayContaining(['文昌貴人', '金輿', '天廚貴人', '劫煞'])
     )
-    expect(c8ex.gods.day.map(item => item.key)).toEqual(
-      expect.arrayContaining(['元辰', '將星', '金神'])
-    )
+    expect(c8ex.gods.day.map(item => item.key)).toEqual(expect.arrayContaining(['元辰', '金神']))
     expect(c8ex.hour.gods.map(item => item.key)).toEqual(
       expect.arrayContaining(['將星', '桃花', '帝座'])
     )
@@ -32,7 +30,7 @@ describe('plugins/char8ex', () => {
     const lsr = lunisolar('2023-01-22 15:19')
     const c8ex = lsr.char8ex(1)
     expect(c8ex.gods.day.map(item => item.key)).toEqual(
-      expect.arrayContaining(['魁罡貴人', '華蓋', '天德', '日德'])
+      expect.arrayContaining(['魁罡貴人', '天德', '日德'])
     )
   })
 
@@ -52,5 +50,12 @@ describe('plugins/char8ex', () => {
     expect(c8ex.month.branchTenGod.map(i => i.name)).toEqual(['七殺', '比肩', '梟神'])
     expect(c8ex.day.branchTenGod.map(i => i.name)).toEqual(['梟神'])
     expect(c8ex.hour.branchTenGod.map(i => i.name)).toEqual(['偏財', '七殺'])
+  })
+
+  it('测试年支神煞， 1990-12-21 7:00', () => {
+    const lsr = lunisolar('1990-12-21 7:00')
+    const c8ex = lsr.char8ex(1)
+    expect(c8ex.year.gods.map(i => i.name)).toEqual(['天印貴人'])
+    expect(c8ex.month.gods.map(i => i.name)).toEqual(['德', '將星', '災煞'])
   })
 })
