@@ -120,7 +120,7 @@ export const godDict: C8GodDict = {
       }
     ]
   },
-  綠神: {
+  祿神: {
     luckLevel: 1,
     rules: [
       {
@@ -413,6 +413,8 @@ export const godDict: C8GodDict = {
       }
     ]
   },
+  // 暗金的煞
+  // TODO 呻吟 白衣 破碎
   // 年日支見支
   天羅: {
     luckLevel: -1,
