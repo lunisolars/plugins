@@ -1,6 +1,6 @@
 {
   "name": "@lunisolar/plugin-sx",
-  "version": "0.1.2",
+  "version": "0.1.0",
   "description": "lunisolar.js 寿星天文插件",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -24,6 +24,11 @@
   "author": "Natron Kan (waterbeside)",
   "license": "MIT",
   "devDependencies": {
-    "conventional-changelog-cli": "^2.2.2"
+    "@lunisolar/sx": "^0.1.3",
+    "conventional-changelog-cli": "^2.2.2",
+    "lunisolar": "3.0.0-beta.9"
+  },
+  "peerDependencies": {
+    "lunisolar": "3.0.0-beta.9"
   }
 }
