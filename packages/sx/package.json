@@ -26,9 +26,9 @@
   "devDependencies": {
     "@lunisolar/sx": "^0.1.3",
     "conventional-changelog-cli": "^2.2.2",
-    "lunisolar": "3.0.0-beta.9"
+    "lunisolar": "3.0.0-beta.10"
   },
   "peerDependencies": {
-    "lunisolar": "3.0.0-beta.9"
+    "lunisolar": "3.0.0-beta.10"
   }
 }

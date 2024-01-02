@@ -1,13 +1,16 @@
-import lunisolar from 'lunisolar'
+import lunisolar, { JD } from 'lunisolar'
 import { YTM, type LunarMonth } from '@lunisolar/sx'
+import { getYTM } from '../utils'
 
-const ytmCache = new Map<number, YTM>()
-
-const getYTM = function (year: number): YTM {
-  if (ytmCache.has(year) && ytmCache.get(year) != void 0) return ytmCache.get(year) as YTM
-  const res = new YTM(year)
-  ytmCache.set(year, res)
-  return res
+const LUNAR_INIT_DATA_KEY: string = 'lunar:initData'
+type LunarInitData = {
+  year: number
+  month: number
+  day: number
+  hour: number
+  leapMonth: number
+  leapMonthIsBig: boolean
+  nyd: number
 }
 
 /**
@@ -20,18 +23,17 @@ export class Lunar extends lunisolar.Lunar {
 
   init() {
     let year = this.jd.year
-    let month = this.jd.month - 1
+    let month = this.jd.month
     let hour = this.jd.hour
     const day = this.jd.day
     // 取得
-    const jd = lunisolar.utils.parseJD(`${year}/${month + 1}/${day}`, this._config.isUTC)
+    const jd = lunisolar.utils.parseJD(`${year}/${month}/${day} 12:00:00`, this._config.isUTC)
 
     // 当年的气朔 Year solar Term and new Moon
     const ytm: YTM = getYTM(jd.year)
 
-    // 查出当年所有的节和气
+    // 查出当年所有的节和气和农历
     const tmData = ytm.getTM(16)
-    // this.
     this.cache.set('tmData', tmData)
     const { lunarMonths } = tmData
 
@@ -40,12 +42,16 @@ export class Lunar extends lunisolar.Lunar {
     // const spData: SpData
     let leapMonth: number = 0
     let leapMonthIsBig: boolean = false
+    let nyd = -1
 
     // 历遍当年所有农历月份
     for (let i = 0; i < lunarMonths.length; i++) {
       const lm = lunarMonths[i]
       const nextLm = i === lunarMonths.length - 1 ? undefined : lunarMonths[i + 1]
-      if (lm.month === 0) sawNewYear = true
+      if (lm.month === 0) {
+        sawNewYear = true
+        nyd = lm.dayJdn - 0.5
+      }
       if (lm.dayJdn <= jd.jdn && ((nextLm && jd.jdn < nextLm.dayJdn) || nextLm === void 0)) {
         if (lmData === null) lmData = lm
       }
@@ -54,21 +60,23 @@ export class Lunar extends lunisolar.Lunar {
         leapMonthIsBig = lm.len > 29
       }
     }
-
-    const initData = {
+    const initData: LunarInitData = {
       year: sawNewYear ? year : year - 1,
-      month: lmData?.month ?? -1,
-      day: jd.jdn - (lmData?.dayJdn ?? 0),
+      month: (lmData?.month ?? -2) + 1 + (lmData?.isLeap ? 100 : 0),
+      day: jd.jdn - (lmData?.dayJdn ?? 0) + 1,
       hour: (hour + 1) % 24 >> 1,
       leapMonth,
-      leapMonthIsBig
+      leapMonthIsBig,
+      nyd
     }
-    this.cache.set('lunar:initData', initData)
+    this.cache.set(LUNAR_INIT_DATA_KEY, initData)
   }
-  // static fromLunar(param: ParseFromLunarParam, config?: LunarConfig): Lunar {
-  //   const date = parseFromLunar(param, config?.lang)
-  //   return new Lunar(date, config)
-  // }
+
+  static fromLunar(param: lunisolar.ParseFromLunarParam, config?: lunisolar.LunarConfig): Lunar {
+    lunisolar.utils.prettyLunarData(param, config?.lang)
+    // const date = parseFromLunar(param, config?.lang)
+    // return new Lunar(date, config)
+  }
 
   // constructor(dateObj: DateConfigType | JDDict, config?: LunarConfig) {
   //   super()
@@ -131,12 +139,13 @@ export class Lunar extends lunisolar.Lunar {
   //   return false
   // }
 
-  // /**
-  //  * 当年正月初一的日期
-  //  */
-  // get lunarNewYearDay(): JD {
-  //   return getLunarNewYearDay(this.year)
-  // }
+  /**
+   * 当年正月初一的日期
+   */
+  get lunarNewYearDay(): JD {
+    const nyd = (this.cache.get(LUNAR_INIT_DATA_KEY) as LunarInitData).nyd
+    return lunisolar.utils.parseJD({ jdn: nyd })
+  }
 
   // /**
   //  * 取得本农历年的取后一天
@@ -195,7 +204,6 @@ export class Lunar extends lunisolar.Lunar {
   //   return this.jd.timestamp
   // }
 
-  // static getLunarNewYearDay(year: number): JD {
-  //   return getLunarNewYearDay(year)
-  // }
+  static getLunarNewYearDay(year: number): JD {
+  }
 }
