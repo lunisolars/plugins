@@ -1,6 +1,6 @@
 import lunisolar, { JD } from 'lunisolar'
 import { YTM, type LunarMonth } from '@lunisolar/sx'
-import { getYTM } from '../utils'
+import { getLunarNewYearDay, getYTM, parseFromLunar } from '../utils'
 
 const LUNAR_INIT_DATA_KEY: string = 'lunar:initData'
 type LunarInitData = {
@@ -73,71 +73,8 @@ export class Lunar extends lunisolar.Lunar {
   }
 
   static fromLunar(param: lunisolar.ParseFromLunarParam, config?: lunisolar.LunarConfig): Lunar {
-    lunisolar.utils.prettyLunarData(param, config?.lang)
-    // const date = parseFromLunar(param, config?.lang)
-    // return new Lunar(date, config)
+    return new Lunar(parseFromLunar(param, config?.lang), config)
   }
-
-  // constructor(dateObj: DateConfigType | JDDict, config?: LunarConfig) {
-  //   super()
-  //   if (config) {
-  //     this._config = Object.assign({}, this._config, config)
-  //   }
-  //   const offset = dateObj instanceof JD ? dateObj._config.offset : 0
-  //   this.jd = parseJD(dateObj, this._config.isUTC, offset)
-  //   let year = this.jd.year
-  //   let month = this.jd.month - 1
-  //   let hour = this.jd.hour
-  //   const day = this.jd.day
-  //   const date = parseJD(`${year}/${month + 1}/${day}`, this._config.isUTC)
-
-  //   // 計算年份
-  //   if (
-  //     year < FIRST_YEAR ||
-  //     year > LAST_YEAR ||
-  //     (year === FIRST_YEAR && month < 1) ||
-  //     (year === FIRST_YEAR && month === 1 && date.day < 19)
-  //   ) {
-  //     throw new Error('Invalid lunar year: out of range')
-  //   }
-
-  //   let dateDiff = getDateDiff(getLunarNewYearDay(year), date)
-  //   if (date && hour === 23) dateDiff += 1
-
-  //   if (dateDiff < 0) {
-  //     year = year - 1
-  //     dateDiff = getDateDiff(getLunarNewYearDay(year), date)
-  //   }
-
-  //   this.year = year
-  //   // 取得當年的闰月
-  //   const [leapMonth, leapMonthIsBig] = getYearLeapMonth(year)
-  //   this.leapMonth = leapMonth
-  //   this.leapMonthIsBig = leapMonthIsBig
-  //   // 計算年和月
-  //   ;[this.month, this.day] = getLunarMonthDate(year, dateDiff, [leapMonth, leapMonthIsBig])
-  //   // 計算時辰 0 ~ 11
-  //   this.hour = (hour + 1) % 24 >> 1
-  // }
-
-  // get isLeapMonth(): boolean {
-  //   return this.month > 100
-  // }
-
-  // get isBigMonth(): boolean {
-  //   const monthData = LUNAR_MONTH_DATAS[this.year - FIRST_YEAR]
-  //   if (this.isLeapMonth) {
-  //     return ((monthData >> 12) & 1) === 1
-  //   } else {
-  //     return ((monthData >> (this.month - 1)) & 1) === 1
-  //   }
-  // }
-
-  // get isLastDayOfMonth(): boolean {
-  //   if (this.isBigMonth && this.day === 30) return true
-  //   if (!this.isBigMonth && this.day === 29) return true
-  //   return false
-  // }
 
   /**
    * 当年正月初一的日期
@@ -205,5 +142,6 @@ export class Lunar extends lunisolar.Lunar {
   // }
 
   static getLunarNewYearDay(year: number): JD {
+    return getLunarNewYearDay(year)
   }
 }
