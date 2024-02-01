@@ -1,16 +1,10 @@
 import lunisolar, { JD } from 'lunisolar'
-import { YTM, type LunarMonth } from '@lunisolar/sx'
+import { type YTM, type LunarMonth } from '@lunisolar/sx'
 import { getLunarNewYearDay, getYTM, parseFromLunar } from '../utils'
 
-const LUNAR_INIT_DATA_KEY: string = 'lunar:initData'
-type LunarInitData = {
-  year: number
-  month: number
-  day: number
-  hour: number
-  leapMonth: number
-  leapMonthIsBig: boolean
+interface LunarData extends lunisolar.LunarData {
   nyd: number
+  len: number
 }
 
 /**
@@ -60,16 +54,17 @@ export class Lunar extends lunisolar.Lunar {
         leapMonthIsBig = lm.len > 29
       }
     }
-    const initData: LunarInitData = {
+    const initData: LunarData = {
       year: sawNewYear ? year : year - 1,
       month: (lmData?.month ?? -2) + 1 + (lmData?.isLeap ? 100 : 0),
       day: jd.jdn - (lmData?.dayJdn ?? 0) + 1,
       hour: (hour + 1) % 24 >> 1,
       leapMonth,
       leapMonthIsBig,
-      nyd
+      nyd,
+      len: lmData?.len ?? 0
     }
-    this.cache.set(LUNAR_INIT_DATA_KEY, initData)
+    this.cache.set(Lunar.DATA_KEY, initData)
   }
 
   static fromLunar(param: lunisolar.ParseFromLunarParam, config?: lunisolar.LunarConfig): Lunar {
@@ -80,7 +75,7 @@ export class Lunar extends lunisolar.Lunar {
    * 当年正月初一的日期
    */
   get lunarNewYearDay(): JD {
-    const nyd = (this.cache.get(LUNAR_INIT_DATA_KEY) as LunarInitData).nyd
+    const nyd = this.getData().nyd
     return lunisolar.utils.parseJD({ jdn: nyd })
   }
 
@@ -99,47 +94,9 @@ export class Lunar extends lunisolar.Lunar {
   //   return phaseOfTheMoon(this, _GlobalConfig.locales[this._config.lang])
   // }
 
-  // toDate(): Date {
-  //   return this.jd.toDate()
-  // }
-
-  // getYearName(): string {
-  //   let res = ''
-  //   let year = this.year
-  //   const numerals = _GlobalConfig.locales[this._config.lang].numerals
-  //   while (year) {
-  //     const s = numerals[year % 10]
-  //     res = s + res
-  //     year = Math.floor(year / 10)
-  //   }
-  //   return res
-  // }
-
-  // getMonthName(): string {
-  //   const LunarMonthNames = _GlobalConfig.locales[this._config.lang].lunarMonths
-  //   const leapStr = _GlobalConfig.locales[this._config.lang].leap
-  //   return (this.isLeapMonth ? leapStr : '') + LunarMonthNames[(this.month % 100) - 1]
-  // }
-
-  // getDayName(): string {
-  //   const lunarDayNames = _GlobalConfig.locales[this._config.lang].lunarDays
-  //   return lunarDayNames[this.day - 1]
-  // }
-
-  // getHourName(): string {
-  //   return _GlobalConfig.locales[this._config.lang].branchs[this.hour]
-  // }
-
-  // toString(): string {
-  //   const locale = _GlobalConfig.locales[this._config.lang]
-  //   return `${this.getYearName()}${
-  //     locale.lunarYearUnit
-  //   }${this.getMonthName()}${this.getDayName()}${this.getHourName()}${locale.lunarHourUnit}`
-  // }
-
-  // valueOf(): number {
-  //   return this.jd.timestamp
-  // }
+  get isBigMonth(): boolean {
+    return this.getData().len > 29
+  }
 
   static getLunarNewYearDay(year: number): JD {
     return getLunarNewYearDay(year)

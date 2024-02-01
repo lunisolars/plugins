@@ -1,5 +1,5 @@
 import { type LunarMonth, YTM } from '@lunisolar/sx'
-import { type JD } from 'lunisolar'
+import lunisolar, { type JD } from 'lunisolar'
 
 export const ytmCache = new Map<number, YTM>()
 
@@ -75,5 +75,5 @@ export const parseFromLunar = function (
     }
   }
   if (monthData === null) throw new Error('Invalid lunar date （输入的阴历日期似乎不存在）')
-  return lunisolar.utils.parseJD({ jdn: monthData.dayJdn - 0.5 + day + (hour * 2) / 24 }, isUTC)
+  return lunisolar.utils.parseJD({ jdn: monthData.dayJdn - 0.5 + day + (hour * 2) / 24 - 1 }, isUTC)
 }
