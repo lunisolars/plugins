@@ -344,7 +344,7 @@ export const dayGods: DayGods = {
   長星: [
     ((lsr: lunisolar.Lunisolar, fromYmdh?: YMDH, toYmdh?: YMDH): number[] | boolean => {
       const res = [[7], [4], [1], [9], [15], [10], [8], [2, 5], [3, 4], [1], [12], [9]][
-        lsr.lunar.month - 1
+        (lsr.lunar.month % 100) - 1
       ]
       if (!toYmdh) return res
       return res.length === 1 ? res[0] === lsr.lunar.day : res.includes(lsr.lunar.day)
@@ -359,7 +359,7 @@ export const dayGods: DayGods = {
   短星: [
     ((lsr: lunisolar.Lunisolar, fromYmdh?: YMDH, toYmdh?: YMDH): number[] | boolean => {
       const res = [[21], [19], [16], [25], [25], [20], [22], [18, 19], [16, 17], [15], [22], [25]][
-        lsr.lunar.month - 1
+        (lsr.lunar.month % 100) - 1
       ]
       if (!toYmdh) return res
       return res.length === 1 ? res[0] === lsr.lunar.day : res.includes(lsr.lunar.day)

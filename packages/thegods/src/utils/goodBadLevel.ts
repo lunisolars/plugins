@@ -91,7 +91,7 @@ function unBadDay(lsr: lunisolar.Lunisolar, gods: Set<string>, acts: ActsSet) {
   // 二月甲戌、四月丙申、六月甲子、七月戊申、八月庚辰、九月辛卯、十月甲子、十二月甲子，德和与赦、愿所汇之辰，诸事不忌。
   const sbArr = [null, 10, null, 32, null, 0, 44, 16, 27, 0, null, 0]
   if (
-    sbArr[lsr.lunar.month] === lsr.char8.day.value &&
+    sbArr[(lsr.lunar.month % 100) - 1] === lsr.char8.day.value &&
     (MEETING_DES.some(i => gods.has(i)) || PARDON_WISH.some(i => gods.has))
   ) {
     acts.bad = new Set<string>()
